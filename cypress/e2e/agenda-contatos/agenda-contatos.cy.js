@@ -6,10 +6,14 @@ describe("Teste para agenda de contatos", () => {
     });
     // Teste de adicionar
     it("Deve incluir informações no formulário", () => {
-        cy.get('input[type="text"]').type("Giovanna");      
-        cy.get('input[type="email"]').type("gio@teste.com");l
-        cy.get('input[type="tel"]').type("21992345678");
-        cy.contains("Adicionar").click();
+        cy.get('.contato').then((contatos) => {
+            const qtDeContatos = contatos.length;
+            cy.get('input[type="text"]').type("Giovanna");      
+            cy.get('input[type="email"]').type("gio@teste.com");
+            cy.get('input[type="tel"]').type("21992345678");
+            cy.contains("Adicionar").click();
+            cy.get('.contato').should('have.length', qtDeContatos + 1);
+        });
         cy.screenshot("teste-incluir");
     });
     // Teste de editar
@@ -19,6 +23,10 @@ describe("Teste para agenda de contatos", () => {
         cy.get('input[type="email"]').clear().type("henry@teste.com"); 
         cy.get('input[type="tel"]').clear().type("21912345678"); 
         cy.get(".alterar").click(); 
+
+        cy.get(".contato").should("contain", "Henry");
+        cy.get(".contato").should("contain", "henry@teste.com");
+        cy.get(".contato").should("contain", "21912345678");
         cy.screenshot("teste-editar"); 
     });
     // Teste para remover
